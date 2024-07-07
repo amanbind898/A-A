@@ -14,7 +14,7 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-
+ 
 const models = require('./models/user');
 
 const UserModel = models.User;
@@ -34,7 +34,7 @@ app.post('/create', async (req, res) => {
     console.log(createdUserdata);
     const token = jwt.sign({ id: createdUser._id }, secret, { expiresIn: '1h' });
     res.cookie('token', token);
-    res.redirect(`/userprofile/${token}`);
+    res.redirect(`/profile/${token}`);
 });
 
 app.get('/login', (req, res) => {
