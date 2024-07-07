@@ -79,7 +79,8 @@ app.get('/profile/:token', async (req, res) => {
         res.render('userprofile', { user, userdata, token });
     } catch (error) {
         console.error('Error fetching profile:', error);
-        res.status(401).send('Invalid token madarchod');
+        //send a popup message say "Please login to view profile"
+        res.redirect('/login');
     }
 });
 
