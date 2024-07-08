@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs');
 const cookieParser = require('cookie-parser');
 const path = require('path');
 const jwt = require('jsonwebtoken');
+require('dotenv').config();
 const port = process.env.PORT || 3000;
 
 const app = express();
@@ -14,6 +15,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
 
  
 const models = require('./models/user');
