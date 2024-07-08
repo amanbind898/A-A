@@ -18,6 +18,30 @@
         footer {
             flex-shrink: 0;
         }
+
+        .hover-underline-animation {
+            display: inline-block;
+            position: relative;
+            color: #3182ce;
+        }
+
+        .hover-underline-animation::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            transform: scaleX(0);
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: #3182ce;
+            transform-origin: bottom right;
+            transition: transform 0.25s ease-out;
+        }
+
+        .hover-underline-animation:hover::after {
+            transform: scaleX(1);
+            transform-origin: bottom left;
+        }
     </style>
 </head>
 
@@ -25,25 +49,26 @@
     <%- include('partials/navbar', { token: token }) %>
     <div class="content-container w-full">
         <div class="container mx-auto mt-10 px-4 sm:px-6 lg:px-8">
-            <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-                <h1 class="text-2xl font-bold text-center mb-4">Welcome, <%= user.username %></h1>
-                <div class="flex flex-col md:flex-row justify-between items-start">
-                    <div class="user-info w-full md:w-1/2 pr-4 mb-4 md:mb-0">
-                        <p><span class="font-bold">Username:</span> <%= user.username %></p>
-                        <p><span class="font-bold">Email:</span> <%= user.email %></p>
-                        <p><span class="font-bold">LeetCode Username:</span> <%= userdata.leetcode || 'Not provided' %></p>
-                        <p><span class="font-bold">Codeforces Username:</span> <%= userdata.codeforces || 'Not provided' %></p>
-                    </div>
-
-                    <div class="actions flex flex-col w-full md:w-1/5 pl-4">
-                        <button id="edit-leetcode-btn"
-                            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mb-2">Edit
-                            LeetCode</button>
-                        <button id="edit-codeforces-btn"
-                            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mb-2">Edit
-                            Codeforces</button>
-                        <a href="/logout"
-                            class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Logout</a>
+            <div class="bg-white shadow-md rounded-lg p-8 mb-4">
+                <h1 class="text-3xl font-bold text-center mb-6">Welcome, <%= user.username %></h1>
+                <div class="flex flex-col justify-between items-start mb-6">
+                    <div class="user-info w-full mb-4">
+                        <p class="mb-2 flex items-center">
+                            <span class="font-bold">Username : <%= user.username %> </span> 
+                        </p>
+                        <p class="mb-2 flex items-center">
+                            <span class="font-bold">Email: <%= user.email %></span> 
+                        </p>
+                        <p class="mb-2 flex items-center">
+                            <span class="font-bold">LeetCode Username: <%= userdata.leetcode || 'Not provided' %> </span> 
+                            <button id="edit-leetcode-btn"
+                                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline ml-2">Edit</button>
+                        </p>
+                        <p class="mb-2 flex items-center">
+                            <span class="font-bold">Codeforces Username: <%= userdata.codeforces || 'Not provided' %></span> 
+                            <button id="edit-codeforces-btn"
+                                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline ml-2">Edit</button>
+                        </p>
                     </div>
                 </div>
                 <div id="edit-forms" class="mt-4">
@@ -64,7 +89,7 @@
                 </div>
             </div>
 
-            <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+            <div class="bg-white shadow-md rounded-lg p-8 mb-4">
                 <h2 class="text-center text-2xl font-bold mb-4">Your Coding Stats</h2>
                 <div class="flex flex-col md:flex-row justify-around">
                     <div class="w-full md:w-1/2 flex justify-center items-center mb-4 md:mb-0">
