@@ -6,7 +6,8 @@ const jwt = require('jsonwebtoken');
 const port = process.env.PORT || 3000;
 
 const app = express();
-const secret = 'secret';
+const secret=process.env.S;
+console.log(secret);
 
 app.set('view engine', 'ejs');
 app.use(express.static(path.join(__dirname, 'public')));
