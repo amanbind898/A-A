@@ -24,18 +24,18 @@
 <body class="bg-gray-100 flex flex-col min-h-screen">
     <%- include('partials/navbar', { token: token }) %>
     <div class="content-container w-full">
-        <div class="container mx-auto mt-10">
+        <div class="container mx-auto mt-10 px-4 sm:px-6 lg:px-8">
             <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
                 <h1 class="text-2xl font-bold text-center mb-4">Welcome, <%= user.username %></h1>
-                <div class="flex justify-between items-start">
-                    <div class="user-info w-1/2 pr-4">
+                <div class="flex flex-col md:flex-row justify-between items-start">
+                    <div class="user-info w-full md:w-1/2 pr-4 mb-4 md:mb-0">
                         <p><span class="font-bold">Username:</span> <%= user.username %></p>
                         <p><span class="font-bold">Email:</span> <%= user.email %></p>
                         <p><span class="font-bold">LeetCode Username:</span> <%= userdata.leetcode || 'Not provided' %></p>
                         <p><span class="font-bold">Codeforces Username:</span> <%= userdata.codeforces || 'Not provided' %></p>
                     </div>
 
-                    <div class="actions flex flex-col w-1/5 pl-4">
+                    <div class="actions flex flex-col w-full md:w-1/5 pl-4">
                         <button id="edit-leetcode-btn"
                             class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mb-2">Edit
                             LeetCode</button>
@@ -66,34 +66,27 @@
 
             <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
                 <h2 class="text-center text-2xl font-bold mb-4">Your Coding Stats</h2>
-                <div class="flex justify-around">
-                    <div class="w-full flex justify-center items-center">
+                <div class="flex flex-col md:flex-row justify-around">
+                    <div class="w-full md:w-1/2 flex justify-center items-center mb-4 md:mb-0">
                         <div>
                             <h3 class="text-center font-bold mb-2">Codeforces</h3>
                             <img src="https://codeforces-readme-stats.vercel.app/api/card?username=<%= userdata.codeforces %>"
                                 alt="Codeforces Stats" class="mx-auto">
                         </div>
                     </div>
-                    <div class="w-full flex flex-col justify-center items-center">
-                        
-
+                    <div class="w-full md:w-1/2 flex justify-center items-center">
+                        <div>
                             <h3 class="text-center font-bold mb-2">LeetCode</h3>
-                       
-                                <img src="https://leetcode-stats.vercel.app/api?username=<%= userdata.leetcode %>&theme=Light"
-                                    alt="<%= userdata.leetcode %>'s LeetCode Stats" class="mx-auto">
-            
+                            <img src="https://leetcode-stats.vercel.app/api?username=<%= userdata.leetcode %>&theme=Light"
+                                alt="<%= userdata.leetcode %>'s LeetCode Stats" class="mx-auto">
                         </div>
-                     
-                       
-                     
-                  
-                </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-   <%- include('partials/footer') %>
+    <%- include('partials/footer') %>
 
     <script>
         document.getElementById('edit-leetcode-btn').addEventListener('click', function () {
@@ -145,7 +138,6 @@
                 alert('Error updating Codeforces username');
             }
         });
-   
     </script>
 </body>
 
