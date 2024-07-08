@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>coderSTAT Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.2/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        .content-container {
+            flex: 1 0 auto;
+        }
+
+        footer {
+            flex-shrink: 0;
+        }
+
+        .hover-underline-animation {
+            display: inline-block;
+            position: relative;
+            color: #3182ce;
+        }
+
+        .hover-underline-animation::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            transform: scaleX(0);
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: #3182ce;
+            transform-origin: bottom right;
+            transition: transform 0.25s ease-out;
+        }
+
+        .hover-underline-animation:hover::after {
+            transform: scaleX(1);
+            transform-origin: bottom left;
+        }
+
+        @media (max-width: 640px) {
+            header h1,
+            footer {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 flex flex-col min-h-screen">
+    <%- include('partials/navbar', { token: token }) %>
+    <div class="content-container w-full">
+        <div class="container mx-auto mt-10 px-4 sm:px-6 lg:px-8">
+            <div class="bg-blue-500 shadow-md rounded-lg p-8 mb-4">
+                <h1 class="text-3xl font-bold text-center mb-6">Dashboard</h1>
+
+                <div class="bg-white shadow-md rounded-lg p-8 mb-4 border">
+                    <h2 class="text-center text-2xl font-bold mb-4">Your Coding Stats</h2>
+                    <div class="flex flex-col md:flex-col justify-around mx-auto items-center">
+                        <div class="w-full md:w-1/2 flex justify-center items-center mb-4 md:mb-0">
+                            <div>
+                                <h3 class="text-center font-bold mb-2">Codeforces</h3>
+                                <img src="https://codeforces-readme-stats.vercel.app/api/card?username=<%= userdata.codeforces %>"
+                                    alt="Codeforces Stats" class="mx-auto">
+                            </div>
+                          
+                        </div>
+                        <div class="w-full md:w-1/2 flex justify-center items-center">
+                            <div>
+                                <h3 class="text-center font-bold mb-2">LeetCode</h3>
+                                <img src="https://leetcode-stats.vercel.app/api?username=<%= userdata.leetcode %>&theme=Light"
+                                    alt="<%= userdata.leetcode %>'s LeetCode Stats" class="mx-auto">
+                            </div>
+                        </div>
+
+                        <div class="w-full md:w-1/2 flex justify-center items-center mt-4">
+                            <div>
+                                <h3 class="text-center font-bold mb-2">GitHub</h3>
+                                <img src="https://github-readme-stats.vercel.app/api?username=<%=userdata.github%>&show_icons=true" />
+                            </div>
+                        </div>
+                        <div class="w-full flex justify-center items-center mt-4">
+                            <p class="text-center text-sm text-gray-600 font-bold">You can save the stats as an image by right-clicking on the image and
+                                selecting 'Save image as...'</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center mt-6">
+                    <a href="/profile/<%=token%>" class="bg-green-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Edit Profile</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <%- include('partials/footer') %>
+</body>
+
+</html>

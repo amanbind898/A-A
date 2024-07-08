@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>coderSTAT - Track Your Coding Potential</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.2/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        .hidden {
+            display: none;
+        }
+
+        .content-container {
+            flex: 1 0 auto;
+        }
+
+        footer {
+            flex-shrink: 0;
+        }
+
+        .hover-underline-animation {
+            display: inline-block;
+            position: relative;
+            color: #3182ce;
+        }
+
+        .hover-underline-animation::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            transform: scaleX(0);
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: #3182ce;
+            transform-origin: bottom right;
+            transition: transform 0.25s ease-out;
+        }
+
+        .hover-underline-animation:hover::after {
+            transform: scaleX(1);
+            transform-origin: bottom left;
+        }
+
+        @media (max-width: 640px) {
+            header h1, footer {
+                font-size: 1rem;
+            }
+        }
+        #lamba{
+            height: 100vh;
+        }
+        .bg-apna{
+            background-color: #00111d;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 flex flex-col min-h-screen">
+    <%- include('partials/navbar', { token: token }) %>
+    <div class="content-container w-full h-full">
+        <div class="container mx-auto mt-10 px-4 sm:px-6 lg:px-8">
+            <div   id="lamba" class="bg-apna shadow-md rounded-lg p-8 mb-4">
+                <h1 class="text-3xl text-red-400 font-bold text-center mb-6">Welcome to coderSTAT</h1>
+                <p class="text-center text-red-400  text-lg mb-6">Track your coding potentials with coderSTAT. Get insights into your performance on popular coding platforms like LeetCode and Codeforces.</p>
+                <img src="https://th.bing.com/th/id/OIG2.d7j2a7m.uakbQEQoFs0W?pid=ImgGn" alt="coderSTAT" class="mx-auto mb-6 h-64 w-64">
+
+                <p class="text-center text-red-400  text-lg mb-6">Register now to get started!</p>
+                 
+
+             <% if(token && token !== '') { %>
+                <div class="text-center mt-6">
+                    <a href="/dashboard/<%= token %>" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Go to Dashboard</a>
+                </div>
+            <% } else { %>
+              
+                <div class="text-center mt-6">
+                    <a href="/create" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Register Now</a>
+                </div>
+                <div class="text-center mt-6">
+                    <a href="/login" class="bg-blue-500 text-sm text-white font-bold py-2 px-4 rounded-lg ">Already have an account? Login</a>
+            <% } %>
+            </div>
+        </div>
+    </div>
+
+<div>
+    <%- include('partials/footer') %>
+</div>
+  
+
+  
+</body>
+
+</html>

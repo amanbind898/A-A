@@ -9,6 +9,7 @@
         
                 <% if (token && token !== '') { %>
                     <a href="/profile/<%=token%>" class="text-gray-600 hover:text-gray-800  mx-2 hover-underline-animation">Profile</a>
+                    <a href="/dashboard/<%=token%>" class="text-gray-600 hover:text-gray-800  mx-2 hover-underline-animation">Dashboard</a>
                     <a href="/logout" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Logout</a>
                 <% } else { %>
                     <li class="mx-2"><a href="/login" class="text-gray-600 hover:text-gray-800 hover-underline-animation ">Login</a></li>

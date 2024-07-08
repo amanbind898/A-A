@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Homepage | Register</title>
+    <title>CoderSTAT | Register</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.2/dist/tailwind.min.css" rel="stylesheet">
     <style>
-        
         .hover-underline-animation {
             display: inline-block;
             position: relative;
-            color: #3182ce; /* Change the color to your preferred one */
+            color: #3182ce;
         }
 
         .hover-underline-animation::after {
@@ -20,7 +20,7 @@
             height: 2px;
             bottom: 0;
             left: 0;
-            background-color: #3182ce; /* Change the color to your preferred one */
+            background-color: #3182ce;
             transform-origin: bottom right;
             transition: transform 0.25s ease-out;
         }
@@ -29,58 +29,168 @@
             transform: scaleX(1);
             transform-origin: bottom left;
         }
+
+        .content-container {
+            flex: 1 0 auto;
+        }
+
+        footer {
+            flex-shrink: 0;
+        }
+
+        @media (min-width: 768px) {
+            .coding-profiles {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-between;
+            }
+
+            .form-group-half {
+                width: 48%;
+            }
+        }
+        /* Password strength meter styles */
+#strength {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2rem;
+}
+
+.bar {
+    flex-grow: 1;
+    height: 10px;
+    background-color: #ddd;
+    margin: 0 2px;
+    border: #02060b 2px solid;
+}
+
     </style>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.2/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body class="bg-gray-100 w-full h-full">
-    <div class="wrapper w-full h-screen bg-zinc-500">
-        <%- include('partials/navbar', { token: token }) %>
-<div class="content w-full h-full">
-    <% if(token && token !== '') { %>
-        <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 mt-10 mx-auto max-w-md">
-           <h1 class="text-2xl font-bold text-center mb-4">Welcome</h1>
-            <p class="text-center">You are already logged in.</p>
-            <p class="text-center">Go to your profile to view your details of codeforces and leetocode stats.</p>
-            <li class="text-center">You can add usernames of codeforces and leetcode to view stats.</li>
-            <li class="text-center">You can save the stats as image by right clicking on the image and save as.</li>
-            
-        </div>
-        <div class="text-center mt-4">
-            <a href="/profile/<%=token%>" class="text-white p-2 m-4  rounded-lg  bg-blue-800 hover:text-blue-800">Go to profile</a>
-        </div>
-        
-    <% } else  {%>
-
-    <form method="post" action="/create" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 mt-10 mx-auto max-w-md">
-        <div class="form-group mb-4">
-            <label for="username" class="block text-gray-700 text-sm font-bold mb-2">Username</label>
-            <input type="text" name="username" id="username" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-        </div>
-        <div class="form-group mb-4">
-            <label for="email" class="block text-gray-700 text-sm font-bold mb-2">Email</label>
-            <input type="email" name="email" id="email" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-        </div>
-        
-        <div class="form-group mb-6">
-            <label for="password" class="block text-gray-700 text-sm font-bold mb-2">Password</label>
-            <input type="password" name="password" id="password" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline">
-        </div>
-        <div class="form-group">
-            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Submit</button>
-
-        </div>
-        <div class="text-center mt-4">
-            Already have an account? <a href="/login" class="text-blue-500 hover:text-blue-800">Login</a>
-     
-        </div>
-
-    </form>
-    <% } %>
-</div>
-        
-<%- include('partials/footer') %>
+<body class="bg-gray-100 flex flex-col min-h-screen">
+    <%- include('partials/navbar', { token: token }) %>
+    <div class="content-container w-full flex flex-col items-center justify-center">
+        <% if(token && token !== '') { %>
+            <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 mt-10 mx-auto max-w-md">
+                <h1 class="text-2xl font-bold text-center mb-4">Welcome</h1>
+                <p class="text-center">You are already logged in.</p>
+                <p class="text-center">Go to your profile to view your details of Codeforces and LeetCode stats.</p>
+                <ul class="text-center">
+                    <li>You can add usernames of Codeforces and LeetCode to view stats.</li>
+                    <li>You can save the stats as an image by right-clicking on the image and selecting 'Save image as...'.</li>
+                </ul>
+            </div>
+            <div class="text-center mt-4">
+                <a href="/profile/<%=token%>" class="text-white p-2 m-4 rounded-lg bg-blue-800 hover:bg-blue-700">Go to Profile</a>
+            </div>
+        <% } else { %>
+            <form method="post" action="/create" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 mt-10 mx-auto max-w-md">
+                <div class="form-group mb-4">
+                    <div class="form-group mb-4">
+                        <label for="email" class="block text-gray-700 text-sm font-bold mb-2">Email</label>
+                        <input type="email" name="email" id="email" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                    </div>
+                    <label for="username" class="block text-gray-700 text-sm font-bold mb-2">Username</label>
+                    <input type="text" name="username" id="username" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                </div>
+               
+                <div class="form-group mb-6">
+                    <label for="password" class="block text-gray-700 text-sm font-bold mb-2">Password</label>
+                    <input type="password" name="password" id="password" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline">
+                   <div id="password-strength-text" class="text-red-500 text-sm mb-6">
+password should contain at least 8 characters, 1 lowercase, 1 uppercase, 1 number and 1 special character
+                   </div>
+                </div>
+                <div class="form-group mb-6">
+                    <label for="confirmPassword" class="block text-gray-700 text-sm font-bold mb-2">Confirm Password</label>
+                    <input type="password" name="confirmPassword" id="confirmPassword" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline">
+                </div>
+                <div id="password-message" class="text-red-500 text-sm mb-6"></div>
+                <div class="coding-profiles">
+                    <div class="form-group form-group-half mb-6">
+                        <label for="codeforces" class="block text-gray-700 text-sm font-bold mb-2">Codeforces Username</label>
+                        <input type="text" name="codeforces" id="codeforces" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline">
+                    </div>
+                    <div class="form-group form-group-half mb-6">
+                        <label for="leetcode" class="block text-gray-700 text-sm font-bold mb-2">LeetCode Username</label>
+                        <input type="text" name="leetcode" id="leetcode" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline">
+                    </div>
+                    <div class="form-group form-group-half mb-6">
+                        <label for="github" class="block text-gray-700 text-sm font-bold mb-2">GitHub Username</label>
+                        <input type="text" name="github" id="github" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Submit</button>
+                </div>
+                <div class="text-center mt-4">
+                    Already have an account? <a href="/login" class="text-blue-500 hover:text-blue-800">Login</a>
+                </div>
+            </form>
+        <% } %>
     </div>
-  
+    <%- include('partials/footer') %>
+   <script>
+    const password = document.getElementById('password');
+    const confirmPassword = document.getElementById('confirmPassword');
+    const passwordStrengthText = document.getElementById('password-strength-text');
+    const passwordMessage = document.getElementById('password-message');
 
+    const checkPassword = () => {
+        let passwordValue = password.value;
+        let confirmPasswordValue = confirmPassword.value;
+        if (passwordValue !== confirmPasswordValue) {
+            passwordMessage.innerHTML = 'Passwords do not match';
+            passwordMessage.style.color = 'red';
+        } else {
+            passwordMessage.innerHTML = '';
+        }
+    }
+    confirmPassword.addEventListener('input', checkPassword);
+    password.addEventListener('input', () => {
+        let passwordValue = password.value;
+        let strengthValue = 0;
+        if (passwordValue.match(/[a-z]+/)) {
+            strengthValue += 1;
+        }
+        if (passwordValue.match(/[A-Z]+/)) {
+            strengthValue += 1;
+        }
+        if (passwordValue.match(/[0-9]+/)) {
+            strengthValue += 1;
+        }
+        if (passwordValue.match(/[$@#&!]+/)) {
+            strengthValue += 1;
+        }
+        if (passwordValue.length > 7) {
+            strengthValue += 1;
+        }
+        switch (strengthValue) {
+            case 0:
+             
+                passwordStrengthText.innerHTML = '';
+                break;
+            case 1:
+             
+                passwordStrengthText.innerHTML = 'Weak';
+                passwordStrengthText.style.color = 'red';
+                break;
+            case 2:
+          
+                passwordStrengthText.innerHTML = 'Moderate';
+                passwordStrengthText.style.color = 'orange';
+                break;
+            case 3:
+                 
+                    passwordStrengthText.innerHTML = 'Strong';
+                    passwordStrengthText.style.color = 'green';
+                    break;
+            default:
+                passwordStrengthText.innerHTML = 'write a strong password';
+                passwordStrengthText.style.color = 'darkgreen';
+                break;
+        }
+    });
+
+   </script>
 </body>
 </html>

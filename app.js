@@ -23,14 +23,21 @@ const Userdata = models.Userdata;
 app.get('/', (req, res) => {
     const token = req.cookies.token || '';
 
+    res.render('home', { token });
+});
+app.get('/create', (req, res) => {
+    const token = req.cookies.token || '';
     res.render('index', { token });
 });
 
+
+
 app.post('/create', async (req, res) => {
-    let { username, email, password } = req.body;
+    let { username, email, password,codeforces,leetcode,github } = req.body;
     password = await bcrypt.hash(password, 8);
     let createdUser = await UserModel.create({ username, email, password });
-    let createdUserdata = await models.Userdata.create({ userid: createdUser._id });
+
+    let createdUserdata = await models.Userdata.create({ userid: createdUser._id, codeforces,leetcode,github });
     console.log(createdUserdata);
     const token = jwt.sign({ id: createdUser._id }, secret, { expiresIn: '1h' });
     res.cookie('token', token);
@@ -79,10 +86,30 @@ app.get('/profile/:token', async (req, res) => {
         res.render('userprofile', { user, userdata, token });
     } catch (error) {
         console.error('Error fetching profile:', error);
-        //send a popup message say "Please login to view profile"
-        res.redirect('/login');
+        res.send('login session expired , go to login page to login again');
     }
 });
+
+app.get('/dashboard/:token', async (req, res) => {
+    const token = req.params.token;
+
+    try {
+        const decoded = jwt.verify(token, secret);
+        const user = await UserModel.findById(decoded.id);
+        const userdata = await Userdata.findOne({ userid: decoded.id });
+
+        if (!userdata) {
+            return res.status(404).send('Userdata not found');
+        }
+
+        res.render('dashboard',{user,userdata,token});
+    }
+    catch (error) {
+        console.error('Error fetching profile:', error);
+        res.send('login session expired , go to login page to login again');
+    }
+});
+
 
 
 app.get('/logout', (req, res) => {
@@ -117,6 +144,20 @@ app.post('/update-codeforces', async (req, res) => {
     } catch (error) {
         console.error('Error updating Codeforces username:', error);
         res.json({ success: false, message: 'Error updating Codeforces username' });
+    }
+});
+app.post('/update-github', async (req, res) => {
+    try {
+        const token = req.cookies.token;
+        const decoded = jwt.verify(token, secret);
+        const userId = decoded.id;
+        const newGithub = req.body.github;
+
+        let updated = await Userdata.findOneAndUpdate({ userid: userId }, { github: newGithub }, { new: true });
+        res.json({ success: true });
+    } catch (error) {
+        console.error('Error updating Github username:', error);
+        res.json({ success: false, message: 'Error updating Github username' });
     }
 });
 
