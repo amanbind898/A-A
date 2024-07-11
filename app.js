@@ -15,6 +15,18 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+//verify token
+app.use((req, res, next) => {
+    const token = req.cookies.token || '';
+    if (token) {
+        jwt.verify(token, secret, (err, decoded) => {
+            if (err) {
+                res.clearCookie('token');
+            }
+        });
+    }
+    next();
+});
 
 
  

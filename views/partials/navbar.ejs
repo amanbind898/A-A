@@ -1,5 +1,5 @@
 <div class="navbar bg-white shadow-md">
-    <div class="container mx-auto flex flex-wrap justify-between items-center py-4">
+    <div class="container mx-auto flex flex-wrap justify-between items-center py-4 px-2">
         <div class="logo mb-4 md:mb-0">
             <a href="/" class="text-gray-800 font-bold text-lg">coderSTATS🎯</a>
         </div>
@@ -11,7 +11,7 @@
                 </g>
             </svg>
         </button>
-        <div id="menu" class="nav-links hidden md:flex md:items-center md:justify-end w-full md:w-auto">
+        <div id="menu" class="nav-links  md:flex md:items-center md:justify-end w-full md:w-auto">
             <ul class="flex flex-col md:flex-row md:items-center md:justify-end md:space-x-4 text-center md:text-left">
                 <li><a href="/" class="text-gray-600 hover:text-gray-800 hover-underline block">Home</a></li>
                 <% if (token && token !== '') { %>
@@ -38,6 +38,65 @@
 </script>
 
 <style>
+    .responsive-font-size {
+  font-size: 1.5vw;
+}
+
+
+.content-container {
+    flex: 1 0 auto;
+}
+
+footer {
+    flex-shrink: 0;
+}
+
+.hover-underline-animation {
+    display: inline-block;
+    position: relative;
+    color: #3182ce;
+}
+
+.hover-underline-animation::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    transform: scaleX(0);
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: #3182ce;
+    transform-origin: bottom right;
+    transition: transform 0.25s ease-out;
+}
+
+.hover-underline-animation:hover::after {
+    transform: scaleX(1);
+    transform-origin: bottom left;
+}
+
+@media (max-width: 640px) {
+    header h1, footer {
+        font-size: 1rem;
+    }
+}
+#lamba{
+    height: max-content;
+}
+.bg-apna{
+    background-color: #00111d;
+}
+
+    @media (max-width: 767px) {
+        .nav-links {
+            display: none;
+        }
+        .nav-links.active {
+            display: block;
+        }
+    }
+
+
     /* CSS for responsiveness and mobile menu */
     @media (max-width: 768px) {
         .nav-links {
