@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs');
 const cookieParser = require('cookie-parser');
 const path = require('path');
 const jwt = require('jsonwebtoken');
+const axios = require('axios');
 require('dotenv').config();
 const port = process.env.PORT || 3000;
 
@@ -39,6 +40,26 @@ app.get('/', (req, res) => {
     const token = req.cookies.token || '';
 
     res.render('home', { token });
+});
+app.get('/nd',async (req, res) => {
+    const token = req.cookies.token || '';
+    const decoded = jwt.verify(token, secret);
+    const user = await UserModel.findById(decoded.id);
+    const userdata = await Userdata.findOne({ userid: decoded.id });
+    const leetcode = userdata.leetcode;
+
+    res.render('newdashboard', { token ,username:leetcode,userdata});
+});
+app.get('/profile/shared/:username', async (req, res) => {
+    try {
+        const username = req.params.username;
+        const profileResponse = await axios.get(`https://alfa-leetcode-api.onrender.com/${username}`);
+        const profileData = profileResponse.data;
+        res.render('profile', { profileData });
+    } catch (error) {
+        console.error("Error fetching profile data:", error);
+        res.status(500).send('Internal Server Error');
+    }
 });
 app.get('/create', (req, res) => {
     const token = req.cookies.token || '';
@@ -175,6 +196,7 @@ app.post('/update-github', async (req, res) => {
         res.json({ success: false, message: 'Error updating Github username' });
     }
 });
+
 
 app.listen(port, () => {
     console.log(`Server is running at ${port}`); 

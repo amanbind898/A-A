@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CoderSTAT | Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.2/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.css" rel="stylesheet">
+    <style>
+        /* styles.css */
+
+        /* Grid container for calendar */
+        .calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr); /* 7 columns for days of the week */
+            gap: 4px; /* Gap between cells */
+        }
+
+        /* Individual calendar day cell */
+        .calendar-day {
+            padding: 10px;
+            border-radius: 4px;
+            text-align: center;
+            font-size: 14px;
+            cursor: pointer; /* Make it clickable if needed */
+        }
+
+        /* Define colors for different activity levels */
+        .low-activity {
+            background-color: #e0fae1; /* Light blue for low activity */
+        }
+
+        .medium-activity {
+            background-color: #82ea80; /* Medium blue for moderate activity */
+        }
+
+        .high-activity {
+            background-color: #43d400; /* Dark blue for high activity */
+        }
+
+        .very-high-activity {
+            background-color: #378f00; /* Deep blue for very high activity */
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex flex-col min-h-screen">
+    <div class="wrapper w-full">
+        <!-- Include Navbar Here -->
+        <%- include('partials/navbar', { token: token }) %>
+
+        <div class="content-container w-full">
+            <div class="container mx-auto mt-10 px-4 sm:px-6 lg:px-8">
+                <div class="flex flex-wrap -mx-2">
+                    <div class="w-full lg:w-1/4 px-2">
+                        <div class="bg-white shadow-md rounded-lg p-4 mb-4">
+                            <div id="profile-card" class="text-center">
+                            </div>
+                            <div class="flex justify-center mt-4">
+                                <button id="share-button" class="bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md">Share Profile</button>
+                            </div>
+                            <script>
+                                document.addEventListener("DOMContentLoaded", () => {
+                                    const shareButton = document.getElementById("share-button");
+                                    const username = "<%= username %>";
+
+                                    shareButton.addEventListener("click", () => {
+                                        const shareUrl = `${window.location.origin}/profile/${username}`;
+                                        navigator.clipboard.writeText(shareUrl).then(() => {
+                                            alert("Profile URL copied to clipboard!");
+                                        }).catch(err => {
+                                            console.error("Failed to copy URL: ", err);
+                                        });
+                                    });
+                                });
+                            </script>
+                        </div>
+                    </div>
+                    <div class="w-full lg:w-3/4 px-2">
+                        <div class="bg-white shadow-md rounded-lg p-4 mb-4">
+                            <h2 class="text-2xl font-bold mb-4">Your Coding Stats</h2>
+                            <div class="flex flex-wrap -mx-2">
+                                <div class="w-full md:w-1/2 px-2 mb-4" id="total-questions"></div>
+                                <div class="w-full md:w-1/2 px-2 mb-4" id="total-contests"></div>
+                                <div class="w-full md:w-1/2 px-2 mb-4" id="problems-solved"></div>
+                                <div class="w-full md:w-1/2 px-2 mb-4">
+                                    <div id="calendar-grid" class="calendar"></div>
+                                </div>
+                                <div class="w-full md:w-1/2 flex justify-center items-center mb-4 md:mb-0">
+                                    <div>
+                                        <h3 class="text-center font-bold mb-2">Codeforces</h3>
+                                        <img src="https://codeforces-readme-stats.vercel.app/api/card?username=<%= userdata.codeforces %>"
+                                            alt="Codeforces Stats" class="mx-auto">
+                                    </div>
+                                  
+                                </div>
+                                <div class="w-full md:w-1/2 flex justify-center items-center mt-4">
+                                    <div>
+                                        <h3 class="text-center font-bold mb-2">GitHub</h3>
+                                        <img src="https://github-readme-stats.vercel.app/api?username=<%=userdata.github%>&show_icons=true" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Include Footer Here -->
+        <%- include('partials/footer') %>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            const username = "<%= username %>"; // Dynamic content from backend
+
+            const baseUrl = "https://alfa-leetcode-api.onrender.com";
+
+            try {
+                // Fetch user profile
+                const userProfileResponse = await axios.get(`${baseUrl}/${username}`);
+                const userProfile = userProfileResponse.data;
+                updateProfileCard(userProfile);
+
+                // Fetch user coding stats
+                const userCodingStatsResponse = await axios.get(`${baseUrl}/userProfile/${username}`);
+                const userCodingStats = userCodingStatsResponse.data;
+                //fetch user contest stats
+                const userContestStatsResponse = await axios.get(`${baseUrl}/${username}/contest`);
+                const userContestStats = userContestStatsResponse.data;
+
+                
+                // Update the various sections of the dashboard
+                updateTotalQuestions(userCodingStats);
+                updateProblemsSolved(userCodingStats);
+                updateCalendar(userCodingStats.submissionCalendar);
+                updateContests(userContestStats);
+
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        });
+
+        function updateProfileCard(userProfile) {
+            const profileCard = document.getElementById("profile-card");
+            profileCard.innerHTML = `
+                <img src="${userProfile.avatar}" alt="Avatar" class="w-24 h-24 mx-auto rounded-full mb-4">
+                <h3 class="text-xl font-bold">${userProfile.name}</h3>
+                <p class="text-gray-600">@${userProfile.username}</p>
+                <p class="text-gray-600">Ranking: ${userProfile.ranking}</p>
+                <p class="text-gray-600">Reputation: ${userProfile.reputation}</p>
+                <p class="text-gray-600">Birthday: ${userProfile.birthday}</p>
+                <p class="text-gray-600">Country: ${userProfile.country}</p>
+                <p class="text-gray-600">School: ${userProfile.school}</p>
+                <p class="text-gray-600">About: ${userProfile.about}</p>
+                <p class="text-gray-600">Skills: ${userProfile.skillTags.join(', ')}</p>
+                <div class="flex justify-center space-x-4 mt-4">
+                    <a href="${userProfile.gitHub}" target="_blank" class="text-gray-500 hover:text-gray-900"><i class="fab fa-github"></i></a>
+                    <a href="${userProfile.twitter}" target="_blank" class="text-blue-500 hover:text-blue-900"><i class="fab fa-twitter"></i></a>
+                    <a href="${userProfile.linkedIN}" target="_blank" class="text-blue-700 hover:text-blue-900"><i class="fab fa-linkedin"></i></a>
+                    ${userProfile.website.map(site => `<a href="${site}" target="_blank" class="text-gray-500 hover:text-gray-900"><i class="fas fa-link"></i></a>`).join('')}
+                </div>
+            `;
+        }
+
+        function updateTotalQuestions(data) {
+            const totalQuestions = document.getElementById("total-questions");
+            totalQuestions.innerHTML = `
+                <div class="bg-blue-500 text-white p-4 rounded-lg shadow-md text-center">
+                    <h4 class="text-xl font-bold">Total Questions solved</h4>
+                    <p class="text-3xl">${data.totalSolved}</p>
+                    <p class="text-md">out of: ${data.totalQuestions}</p>
+                    <p class="text-md">Easy: ${data.easySolved}/${data.totalEasy}</p>
+                    <p class="text-md">Medium: ${data.mediumSolved}/${data.totalMedium}</p>
+                    <p class="text-md">Hard: ${data.hardSolved}/${data.totalHard}</p>
+                </div>
+            `;
+        }
+
+        function updateProblemsSolved(data) {
+            const problemsSolved = document.getElementById("problems-solved");
+            problemsSolved.innerHTML = `
+                <div class="bg-green-500 text-white p-4 rounded-lg shadow-md text-center">
+                    <h4 class="text-xl font-bold">Problems Solved</h4>
+                    <p class="text-3xl">${data.totalSolved}</p>
+                    <p class="text-md">Easy: ${data.easySolved}</p>
+                    <p class="text-md">Medium: ${data.mediumSolved}</p>
+                    <p class="text-md">Hard: ${data.hardSolved}</p>
+                </div>
+            `;
+        }
+        function updateContests(data) {
+            const totalContests = document.getElementById("total-contests");
+            totalContests.innerHTML = `
+                <div class="bg-blue-500 text-white p-4 rounded-lg shadow-md text-center">
+                    <h4 class="text-xl font-bold">Total Contests</h4>
+                    <p class="text-3xl">${data.contestAttend}</p>
+                    <p class="text-md">contest Badges: ${data.contestBadges}</p>
+                    <p class="text-md">Rating: ${data.contestRating}</p>
+                    <p class="text-md">Rank: ${data.contestGlobalRanking}</p>
+                </div>
+            `;
+        }
+
+        function updateCalendar(submissionCalendar) {
+            const calendarGrid = document.getElementById('calendar-grid');
+
+            Object.keys(submissionCalendar).forEach(date => {
+                const submissionsCount = submissionCalendar[date];
+                const dayElement = document.createElement('div');
+                dayElement.classList.add('calendar-day');
+                dayElement.textContent = submissionsCount;
+                dayElement.classList.add(getActivityLevel(submissionsCount));
+                calendarGrid.appendChild(dayElement);
+            });
+        }
+
+        function getActivityLevel(submissionsCount) {
+            if (submissionsCount <= 5) {
+                return 'low-activity';
+            } else if (submissionsCount <= 10) {
+                return 'medium-activity';
+            } else if (submissionsCount <= 15) {
+                return 'high-activity';
+            } else {
+                return 'very-high-activity';
+            }
+        }
+    </script>
+</body>
+</html>
