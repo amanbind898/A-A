@@ -1,0 +1,20 @@
+<div class="navbar bg-white shadow-md">
+    <div class="container mx-auto flex justify-between items-center py-4">
+        <div class="logo">
+            <a href="/" class="resonsive-font-size font-bold text-gray-800 "">coderSTATS🎯</a>
+        </div>
+        <div class="nav-links">
+            <ul class="flex items-center">
+                <li class="mx-2"><a href="/" class="text-gray-600 hover:text-gray-800 hover-underline-animation">Home</a></li>
+        
+                <% if (token && token !== '') { %>
+                    <a href="/dashboard/<%=token%>" class="text-gray-600 hover:text-gray-800  mx-2 hover-underline-animation">Dashboard</a>
+                    <a href="/logout" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Logout</a>
+                <% } else { %>
+                    <li class="mx-2"><a href="/login" class="text-gray-600 hover:text-gray-800 hover-underline-animation ">Login</a></li>
+                    <li class="mx-2"><a href="/create" class="text-gray-600 hover:text-gray-800 hover-underline-animation ">Register</a></li>
+                <% } %>
+            </ul>
+        </div>
+    </div>
+</div>
