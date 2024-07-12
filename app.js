@@ -23,6 +23,7 @@ app.use((req, res, next) => {
         jwt.verify(token, secret, (err, decoded) => {
             if (err) {
                 res.clearCookie('token');
+                res.redirect('/login');
             }
         });
     }
@@ -122,7 +123,7 @@ app.get('/profile/:token', async (req, res) => {
         res.render('userprofile', { user, userdata, token });
     } catch (error) {
         console.error('Error fetching profile:', error);
-        res.send('login session expired , go to login page to login again');
+        res.redirect('/login');
     }
 });
 
@@ -142,7 +143,7 @@ app.get('/dashboard/:token', async (req, res) => {
     }
     catch (error) {
         console.error('Error fetching profile:', error);
-        res.send('login session expired , go to login page to login again');
+        res.redirect('/login');
     }
 });
 
