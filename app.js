@@ -96,7 +96,7 @@ app.post('/login', async (req, res) => {
             if (isMatch) {
                 const token = jwt.sign({ id: user._id }, secret, { expiresIn: '1h' });
                 res.cookie('token', token);
-                res.redirect(`/profile/${token}`);
+                res.redirect(`/nd`);
             } else {
                 res.status(401).render('login', { error: 'Invalid email or password', token: '' });
             }
